@@ -2,7 +2,9 @@
 const { DOMParser } = require('../lib/dom-parser');
 
 /**
- * @typedef ErrorLevel {'warn' | 'error' | 'fatalError'}
+ * {'warning' | 'error' | 'fatalError'}
+ *
+ * @typedef ErrorLevel
  */
 
 /**
@@ -10,30 +12,28 @@ const { DOMParser } = require('../lib/dom-parser');
  * Calling it without any arguments allows to assert on `errors` after using the parser.
  * every field of the first argument is options and allows to specify test specific behavior.
  * - `errorHandler`: The `errorHandler` to pass to DOMParser constructor options,
- * 									default stores a list of all entries per `key` in `errors` and does not log or throw.
+ * default stores a list of all entries per `key` in `errors` and does not log or throw.
  * - `errors`: the object for the `errorHandler` to use,
- * 						is also returned with the same name for later assertions,
- * 						default is an empty object
- * - `locator`: Whether to record node locations in the XML string, default is true
+ * is also returned with the same name for later assertions,
+ * default is an empty object - `locator`: Whether to record node locations in the XML string,
+ * default is true.
  *
- * @param options {{
- * 					errorHandler?: function (key: ErrorLevel, msg: string)
- * 				  							| Partial<Record<ErrorLevel, function(msg:string)>>,
- * 					errors?: Partial<Record<ErrorLevel, string[]>>,
- * 					locator?: boolean
- *				}}
- * @returns {{parser: DOMParser, errors: Partial<Record<ErrorLevel, string[]>>}}
+ * @param options
+ * {{
+ * onError?: function (level:string, msg:string, context:DOMHandler),
+ * errors?: [ErrorLevel, string, object][],
+ * locator?: boolean }}
+ * @returns {{ parser: DOMParser; errors: [ErrorLevel, string, Object][] }}
  */
-function getTestParser({ errorHandler, errors = {}, locator = true } = {}) {
-	errorHandler =
-		errorHandler ||
-		((key, msg) => {
-			if (!errors[key]) errors[key] = [];
-			errors[key].push(msg);
+function getTestParser({ onError, errors = [], locator = true } = {}) {
+	onError =
+		onError ||
+		((level, msg, { locator }) => {
+			errors.push([level, msg, locator]);
 		});
 	return {
 		errors,
-		parser: new DOMParser({ errorHandler, locator }),
+		parser: new DOMParser({ onError, locator }),
 	};
 }
 

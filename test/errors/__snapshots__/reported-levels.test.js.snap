@@ -1,0 +1,797 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Encoding_ReplacementCharacter with mimeType text/html should be reported 1`] = `
+[
+  [
+    "warning",
+    "Unicode replacement character detected, source encoding issues?",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`Encoding_ReplacementCharacter with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: Unicode replacement character detected, source encoding issues?
+    at warning (lib/sax.js:#0)",
+]
+`;
+
+exports[`Encoding_ReplacementCharacter with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "warning",
+    "Unicode replacement character detected, source encoding issues?",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`Encoding_ReplacementCharacter with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: Unicode replacement character detected, source encoding issues?
+    at warning (lib/sax.js:#0)",
+]
+`;
+
+exports[`SYNTAX_AttributeMissingEndingQuote with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: attribute value no end '"' match",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_AttributeMissingEndingQuote with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: attribute value no end '"' match
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`SYNTAX_AttributeMissingEndingQuote with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: attribute value no end '"' match",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_AttributeMissingEndingQuote with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: attribute value no end '"' match
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`SYNTAX_ElementClosingNotConnected with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: elements closed character '/' and '>' must be connected to",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_ElementClosingNotConnected with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: elements closed character '/' and '>' must be connected to
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`SYNTAX_ElementClosingNotConnected with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: elements closed character '/' and '>' must be connected to",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_ElementClosingNotConnected with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: elements closed character '/' and '>' must be connected to
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`SYNTAX_InvalidAttributeName with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: invalid attribute:123",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_InvalidAttributeName with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: invalid attribute:123
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`SYNTAX_InvalidAttributeName with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: invalid attribute:123",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_InvalidAttributeName with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: invalid attribute:123
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`SYNTAX_InvalidTagName with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: invalid tagName:123",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_InvalidTagName with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: invalid tagName:123
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`SYNTAX_InvalidTagName with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: invalid tagName:123",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`SYNTAX_InvalidTagName with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: element parse error: Error: invalid tagName:123
+    at error (lib/sax.js:#11)",
+]
+`;
+
+exports[`WF_AttValue_CleanAttrVals with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_AttValue_CleanAttrVals_MissingClosingQuote with mimeType text/html should not be reported: caught 1`] = `[ParseError: Opening and ending tag mismatch: "xml" != "Label"]`;
+
+exports[`WF_AttValue_CleanAttrVals_MissingClosingQuote with mimeType text/html should not be reported: reported 1`] = `
+[
+  [
+    "error",
+    "element parse error: Error: attribute value no end '"' match",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+  [
+    "fatalError",
+    "Opening and ending tag mismatch: "xml" != "Label"",
+    {
+      "columnNumber": 7,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeEqualMissingValue with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_AttributeMissingQuote with mimeType text/html should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "value" missed quot(")!",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingQuote with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "value" missed quot(")!
+    at warning (lib/sax.js:#21)",
+]
+`;
+
+exports[`WF_AttributeMissingQuote with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "value" missed quot(")!",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingQuote with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "value" missed quot(")!
+    at warning (lib/sax.js:#21)",
+]
+`;
+
+exports[`WF_AttributeMissingQuote2 with mimeType text/html should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "&" missed quot(")!!",
+    {
+      "columnNumber": 12,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingQuote2 with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "&" missed quot(")!!
+    at warning (lib/sax.js:#24)",
+]
+`;
+
+exports[`WF_AttributeMissingQuote2 with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "&" missed quot(")!!",
+    {
+      "columnNumber": 12,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingQuote2 with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "&" missed quot(")!!
+    at warning (lib/sax.js:#24)",
+]
+`;
+
+exports[`WF_AttributeMissingStartingQuote with mimeType text/html should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "attr" missed start quot(")!!",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingStartingQuote with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "attr" missed start quot(")!!
+    at warning (lib/sax.js:#17)",
+]
+`;
+
+exports[`WF_AttributeMissingStartingQuote with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "attr" missed start quot(")!!",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingStartingQuote with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "attr" missed start quot(")!!
+    at warning (lib/sax.js:#17)",
+]
+`;
+
+exports[`WF_AttributeMissingValue with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_AttributeMissingValue with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "attr" missed value!! "attr" instead!!",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingValue with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "attr" missed value!! "attr" instead!!
+    at warning (lib/sax.js:#22)",
+]
+`;
+
+exports[`WF_AttributeMissingValue2 with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_AttributeMissingValue2 with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute "attr" missed value!! "attr" instead2!!",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+  [
+    "warning",
+    "attribute "attr2" missed value!! "attr2" instead!!",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeMissingValue2 with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute "attr" missed value!! "attr" instead2!!
+    at warning (lib/sax.js:#25)",
+]
+`;
+
+exports[`WF_AttributeValueMustAfterEqual with mimeType text/html should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute value must after "="",
+    {
+      "columnNumber": 10,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeValueMustAfterEqual with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute value must after "="
+    at warning (lib/sax.js:#15)",
+]
+`;
+
+exports[`WF_AttributeValueMustAfterEqual with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "warning",
+    "attribute value must after "="",
+    {
+      "columnNumber": 10,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_AttributeValueMustAfterEqual with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "warning: attribute value must after "="
+    at warning (lib/sax.js:#15)",
+]
+`;
+
+exports[`WF_ElementTypeMatch_Mismatch_Root with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_ElementTypeMatch_UnclosedXmlTag with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_ElementTypeMatch_UnclosedXmlTag_IncompleteStartTag with mimeType text/html should not be reported: reported 1`] = `
+[
+  [
+    "error",
+    "unexpected end of input",
+    {
+      "columnNumber": 1,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not matching Reference production: &1;",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not matching Reference production: &1;
+    at error (lib/sax.js:#2)",
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not matching Reference production: &1;",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not matching Reference production: &1;
+    at error (lib/sax.js:#2)",
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction_Attr with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not matching Reference production: &1;",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction_Attr with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not matching Reference production: &1;
+    at error (lib/sax.js:#2)",
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction_Attr with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not matching Reference production: &1;",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction_Attr with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not matching Reference production: &1;
+    at error (lib/sax.js:#2)",
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction_Script with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_Entity_ReferenceProduction_Script with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not matching Reference production: &1;",
+    {
+      "columnNumber": 9,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_Entity_ReferenceProduction_Script with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not matching Reference production: &1;
+    at error (lib/sax.js:#2)",
+]
+`;
+
+exports[`WF_EntityDeclared with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not found:&e;",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityDeclared with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not found:&e;
+    at error (lib/sax.js:#3)",
+]
+`;
+
+exports[`WF_EntityDeclared with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not found:&e;",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityDeclared with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not found:&e;
+    at error (lib/sax.js:#3)",
+]
+`;
+
+exports[`WF_EntityDeclared_Attr with mimeType text/html should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not found:&e;",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityDeclared_Attr with mimeType text/html should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not found:&e;
+    at error (lib/sax.js:#3)",
+]
+`;
+
+exports[`WF_EntityDeclared_Attr with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not found:&e;",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityDeclared_Attr with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not found:&e;
+    at error (lib/sax.js:#3)",
+]
+`;
+
+exports[`WF_EntityDeclared_Script with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_EntityDeclared_Script with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "entity not found:&e;",
+    {
+      "columnNumber": 9,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityDeclared_Script with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: entity not found:&e;
+    at error (lib/sax.js:#3)",
+]
+`;
+
+exports[`WF_EntityRef with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_EntityRef with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "EntityRef: expecting ;",
+    {
+      "columnNumber": 6,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityRef with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: EntityRef: expecting ;
+    at error (lib/sax.js:#1)",
+]
+`;
+
+exports[`WF_EntityRef_Attr with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_EntityRef_Attr with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "EntityRef: expecting ;",
+    {
+      "columnNumber": 11,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityRef_Attr with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: EntityRef: expecting ;
+    at error (lib/sax.js:#1)",
+]
+`;
+
+exports[`WF_EntityRef_Script with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_EntityRef_Script with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "EntityRef: expecting ;",
+    {
+      "columnNumber": 9,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_EntityRef_Script with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: EntityRef: expecting ;
+    at error (lib/sax.js:#1)",
+]
+`;
+
+exports[`WF_SingleRootElement_CDataOutside with mimeType text/html should not be reported: caught 1`] = `[ParseError: Not well-formed XML starting with "<!" at position 0]`;
+
+exports[`WF_SingleRootElement_CDataOutside with mimeType text/html should not be reported: reported 1`] = `
+[
+  [
+    "fatalError",
+    "Not well-formed XML starting with "<!" at position 0",
+    {
+      "columnNumber": 1,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_SingleRootElement_ContentAfter with mimeType text/html should not be reported: reported 1`] = `
+[
+  [
+    "error",
+    "Extra content at the end of the document",
+    {
+      "columnNumber": 1,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_SingleRootElement_ContentAfter with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "Extra content at the end of the document",
+    {
+      "columnNumber": 1,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_SingleRootElement_ContentAfter with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: Extra content at the end of the document
+    at error (lib/sax.js:#5)",
+]
+`;
+
+exports[`WF_SingleRootElement_ContentBefore with mimeType text/html should not be reported: reported 1`] = `[]`;
+
+exports[`WF_SingleRootElement_ContentBefore with mimeType text/xml should be reported 1`] = `
+[
+  [
+    "error",
+    "Unexpected content outside root element: 'textbefore'",
+    {
+      "columnNumber": 12,
+      "lineNumber": 1,
+    },
+  ],
+]
+`;
+
+exports[`WF_SingleRootElement_ContentBefore with mimeType text/xml should escalate Error thrown in onError to ParseError 1`] = `
+[
+  "error: Unexpected content outside root element: 'textbefore'
+    at error (lib/sax.js:#6)",
+]
+`;

@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`entity replacement ignores js prototype chain should not pick up 'entities' from the prototype chain 1`] = `
+{
+  "actual": "
+		<xml>
+			<hasOwnProperty>&amp;hasOwnProperty;</hasOwnProperty> 
+			<proto>&amp;__proto__;</proto> 
+			<constructor>&amp;constructor;</constructor>
+		</xml>",
+  "errors": [
+    [
+      "error",
+      "entity not found:&hasOwnProperty;",
+      {
+        "columnNumber": 44,
+        "lineNumber": 5,
+      },
+    ],
+    [
+      "error",
+      "entity not found:&__proto__;",
+      {
+        "columnNumber": 44,
+        "lineNumber": 5,
+      },
+    ],
+    [
+      "error",
+      "entity not found:&constructor;",
+      {
+        "columnNumber": 44,
+        "lineNumber": 5,
+      },
+    ],
+  ],
+}
+`;

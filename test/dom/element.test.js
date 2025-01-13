@@ -1,142 +1,20 @@
 'use strict';
 
+const { describe, expect, test } = require('@jest/globals');
+const { getTestParser } = require('../get-test-parser');
 const { DOMParser, DOMImplementation, XMLSerializer } = require('../../lib');
 const { MIME_TYPE, NAMESPACE } = require('../../lib/conventions');
-const { Element } = require('../../lib/dom');
+const { Element, Node } = require('../../lib/dom');
+const { DOMException, DOMExceptionName } = require('../../lib/errors');
+const { expectDOMException } = require('../errors/expectDOMException');
 
-describe('Document', () => {
-	// See: http://jsfiddle.net/bigeasy/ShcXP/1/
-	describe('getElementsByTagName', () => {
-		it('should return the correct number of elements in XML documents', () => {
-			const doc = new DOMParser().parseFromString(
-				`<xml id="0" lang="en">
-						<head id="1"><title id="2">Title</title></head>
-						<body id="3">
-							<div id="4"><p id="5"></p></div>
-							<html xmlns="${NAMESPACE.HTML}" id="6"><div id="7"></div></html>
-						</body>
-					</xml>`
-			);
-			expect(doc.getElementsByTagName('*')).toHaveLength(8);
-			expect(doc.documentElement.getElementsByTagName('*')).toHaveLength(7);
-			expect(doc.getElementsByTagName('div')).toHaveLength(2);
-			expect(doc.documentElement.getElementsByTagName('div')).toHaveLength(2);
-
-			// in HTML documents inside the HTML namespace case doesn't have to match,
-			// this is not an HTML document, so no div will be found,
-			// not even the second one inside the HTML namespace
-			expect(doc.getElementsByTagName('DIV')).toHaveLength(0);
-			expect(doc.documentElement.getElementsByTagName('DIV')).toHaveLength(0);
-		});
-
-		it('should return the correct number of elements in HTML documents', () => {
-			const doc = new DOMParser().parseFromString(
-				`<html id="0" lang="en">
-						<head id="1"><title id="2">Title</title></head>
-						<body id="3">
-							<div id="4"><p id="5"></p></div>
-							<xml xmlns="${NAMESPACE.XML}" id="6"><div id="7"></div></xml>
-						</body>
-					</html>`,
-				MIME_TYPE.HTML
-			);
-			expect(doc.getElementsByTagName('*')).toHaveLength(8);
-			expect(doc.documentElement.getElementsByTagName('*')).toHaveLength(7);
-			expect(doc.getElementsByTagName('div')).toHaveLength(2);
-			expect(doc.documentElement.getElementsByTagName('div')).toHaveLength(2);
-
-			// in HTML documents inside the HTML namespace case doesn't have to match,
-			// but the second one is not in the HTML namespace
-			const documentDIVs = doc.getElementsByTagName('DIV');
-			expect(documentDIVs).toHaveLength(1);
-			expect(documentDIVs.item(0).getAttribute('id')).toBe('4');
-			const elementDIVs = doc.documentElement.getElementsByTagName('DIV');
-			expect(elementDIVs).toHaveLength(1);
-			expect(elementDIVs.item(0).getAttribute('id')).toBe('4');
-		});
-
-		it('should support API on element (this test needs to be split)', () => {
-			const doc = new DOMParser().parseFromString(
-				'<xml xmlns="http://test.com" xmlns:t="http://test.com" xmlns:t2="http://test2.com">' +
-					'<t:test/><test/><t2:test/>' +
-					'<child attr="1"><test><child attr="2"/></test></child>' +
-					'<child attr="3"/></xml>',
-				'text/xml'
-			);
-
-			const childs1 = doc.documentElement.getElementsByTagName('child');
-			expect(childs1.item(0).getAttribute('attr')).toBe('1');
-			expect(childs1.item(1).getAttribute('attr')).toBe('2');
-			expect(childs1.item(2).getAttribute('attr')).toBe('3');
-			expect(childs1).toHaveLength(3);
-
-			const childs2 = doc.getElementsByTagName('child');
-			expect(childs2.item(0).getAttribute('attr')).toBe('1');
-			expect(childs2.item(1).getAttribute('attr')).toBe('2');
-			expect(childs2.item(2).getAttribute('attr')).toBe('3');
-			expect(childs2).toHaveLength(3);
-
-			const childs3 = doc.documentElement.getElementsByTagName('*');
-			for (let i = 0, buf = []; i < childs3.length; i++) {
-				buf.push(childs3[i].tagName);
-			}
-			expect(childs3).toHaveLength(7);
-
-			const feed = new DOMParser().parseFromString('<feed><entry>foo</entry></feed>');
-			const entries = feed.documentElement.getElementsByTagName('entry');
-			expect(entries).toHaveLength(1);
-			expect(entries[0].nodeName).toBe('entry');
-			expect(feed.documentElement.childNodes.item(0).nodeName).toBe('entry');
-		});
-	});
-
-	it('supports getElementsByTagNameNS', () => {
-		const doc = new DOMParser().parseFromString(
-			'<xml xmlns="http://test.com" xmlns:t="http://test.com" xmlns:t2="http://test2.com">' +
-				'<t:test/><test/><t2:test/>' +
-				'<child attr="1"><test><child attr="2"/></test></child>' +
-				'<child attr="3"/></xml>',
-			'text/xml'
-		);
-
-		const childs1 = doc.documentElement.getElementsByTagNameNS('http://test.com', '*');
-		expect(childs1).toHaveLength(6);
-
-		const childs2 = doc.getElementsByTagNameNS('http://test.com', '*');
-		expect(childs2).toHaveLength(7);
-
-		const childs3 = doc.documentElement.getElementsByTagNameNS('http://test.com', 'test');
-		expect(childs3).toHaveLength(3);
-
-		const childs4 = doc.getElementsByTagNameNS('http://test.com', 'test');
-		expect(childs4).toHaveLength(3);
-
-		const childs5 = doc.getElementsByTagNameNS('*', 'test');
-		expect(childs5).toHaveLength(4);
-
-		const childs6 = doc.documentElement.getElementsByTagNameNS('*', 'test');
-		expect(childs6).toHaveLength(4);
-	});
-
-	it('supports getElementById', () => {
-		const doc = new DOMParser().parseFromString(
-			'<xml xmlns="http://test.com" id="root">' +
-				'<child id="a1" title="1"><child id="a2"  title="2"/></child>' +
-				'<child id="a1"   title="3"/></xml>',
-			'text/xml'
-		);
-		expect(doc.getElementById('root')).not.toBeNull();
-		expect(doc.getElementById('a1').getAttribute('title')).toBe('1');
-		expect(doc.getElementById('a2').getAttribute('title')).toBe('2');
-		expect(doc.getElementById('a2').getAttribute('title2')).toBe('');
-	});
-
-	it('can properly append exist child', () => {
+describe('documentElement', () => {
+	test('can properly append exist child', () => {
 		const doc = new DOMParser().parseFromString(
 			'<xml xmlns="http://test.com" id="root">' +
 				'<child1 id="a1" title="1"><child11 id="a2"  title="2"/></child1>' +
 				'<child2 id="a1"   title="3"/><child3 id="a1"   title="3"/></xml>',
-			'text/xml'
+			MIME_TYPE.XML_TEXT
 		);
 
 		const doc1 = doc;
@@ -157,12 +35,12 @@ describe('Document', () => {
 		expect(str3.length).toBe(str4.length);
 	});
 
-	it('can properly append exist other child', () => {
+	test('can properly append exist other child', () => {
 		const doc = new DOMParser().parseFromString(
 			'<xml xmlns="http://test.com" id="root">' +
 				'<child1 id="a1" title="1"><child11 id="a2"  title="2"><child/></child11></child1>' +
 				'<child2 id="a1"   title="3"/><child3 id="a1"   title="3"/></xml>',
-			'text/xml'
+			MIME_TYPE.XML_TEXT
 		);
 
 		const doc1 = doc;
@@ -177,14 +55,14 @@ describe('Document', () => {
 		expect(doc2.documentElement.lastChild.childNodes).toHaveLength(1);
 		expect(str1).not.toBe(str2);
 		expect(str1).not.toHaveLength(str2.length);
-		const doc3 = new DOMParser().parseFromString(str2, 'text/xml');
+		const doc3 = new DOMParser().parseFromString(str2, MIME_TYPE.XML_TEXT);
 		doc3.documentElement.firstChild.appendChild(doc3.documentElement.lastChild);
 		const str3 = new XMLSerializer().serializeToString(doc3);
 		expect(str1).toBe(str3);
 	});
 
-	it('can properly set textContent', () => {
-		const doc = new DOMParser().parseFromString('<test><a/><b><c/></b></test>');
+	test('can properly set textContent', () => {
+		const doc = new DOMParser().parseFromString('<test><a/><b><c/></b></test>', MIME_TYPE.XML_TEXT);
 		const a = doc.documentElement.firstChild;
 		const b = a.nextSibling;
 		a.textContent = 'hello';
@@ -197,8 +75,8 @@ describe('Document', () => {
 		expect(doc.documentElement.toString()).toBe('<test>bye</test>');
 	});
 
-	it('appendElement and removeElement', () => {
-		const dom = new DOMParser().parseFromString(`<root><A/><B/><C/></root>`);
+	test('appendElement and removeElement', () => {
+		const dom = new DOMParser().parseFromString(`<root><A/><B/><C/></root>`, MIME_TYPE.XML_TEXT);
 		const doc = dom.documentElement;
 		const arr = [];
 		while (doc.firstChild) {
@@ -229,15 +107,131 @@ describe('Document', () => {
 		expect(doc.childNodes.toString()).toBe(`<A/><B/><C/>`);
 	});
 
+	test('should throw DOMException when trying to append a doctype', () => {
+		const impl = new DOMImplementation();
+		const doc = impl.createDocument(null, 'root');
+		const docType = impl.createDocumentType('dt');
+		expect(docType.nodeType).toBe(Node.DOCUMENT_TYPE_NODE);
+		expectDOMException(
+			() => doc.documentElement.appendChild(docType),
+			DOMExceptionName.HierarchyRequestError,
+			'node type 10 for parent node type 1'
+		);
+	});
+
 	xit('nested append failed', () => {});
 
 	xit('self append failed', () => {});
 });
 
+const INPUT = (first = '', second = '', third = '', fourth = '') => `
+<html >
+	<body id='body'>
+		<p id='p1' class=' quote first   odd ${first} '>Lorem ipsum</p>
+		<p id='p2' class=' quote second  even ${second} '>Lorem ipsum</p>
+		<p id='p3' class=' quote third   odd ${third} '>Lorem ipsum</p>
+		<p id='p4' class=' quote fourth  even ${fourth} '>Lorem ipsum</p>
+	</body>
+</html>
+`;
+
+/**
+ * Whitespace that can be part of classnames.
+ * Some characters (like `\u2028`) will be normalized when parsing,
+ * but they can still be added to the dom after parsing.
+ *
+ * @see https://www.w3.org/TR/html52/infrastructure.html#set-of-space-separated-tokens
+ * @see {@link normalizeLineEndings}
+ * @see https://www.w3.org/TR/xml11/#sec-line-ends
+ */
+const NON_HTML_WHITESPACE =
+	'\v\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff';
+
 describe('Element', () => {
 	const ATTR_MIXED_CASE = 'AttR';
 	const ATTR_LOWER_CASE = 'attr';
 	const VALUE = '2039e2dk';
+	describe('constructor', () => {
+		test('should throw Illegal constructor TypeError when trying to access constructor directly', () => {
+			expect(() => new Element()).toThrow(TypeError);
+		});
+	});
+	test('_nsMap has no prototype properties', () => {
+		const element = new DOMImplementation().createDocument(null, 'doc').documentElement;
+		expect(element._nsMap).not.toHaveProperty('prototype');
+		expect(element._nsMap).not.toHaveProperty('__proto__');
+	});
+	describe('getAttribute', () => {
+		const doc = new DOMImplementation().createDocument(null, 'xml');
+		expect(doc.documentElement.getAttribute('no')).toBeNull();
+	});
+	describe('getElementsByClassName', () => {
+		test('should be able to resolve [] as a class name', () => {
+			const doc = getTestParser().parser.parseFromString(INPUT('[]'), MIME_TYPE.XML_TEXT);
+			const body = doc.getElementsByTagName('body')[0];
+			expect(body.getElementsByClassName('[]')).toHaveLength(1);
+		});
+		test('should be able to resolve [ as a class name', () => {
+			const doc = getTestParser().parser.parseFromString(INPUT('['), MIME_TYPE.XML_TEXT);
+			const body = doc.getElementsByTagName('body')[0];
+			expect(body.getElementsByClassName('[')).toHaveLength(1);
+		});
+		test('should be able to resolve multiple class names in a different order', () => {
+			const doc = getTestParser().parser.parseFromString(INPUT(), MIME_TYPE.XML_TEXT);
+			const body = doc.getElementsByTagName('body')[0];
+			expect(body.getElementsByClassName('odd quote')).toHaveLength(2);
+		});
+		test('should be able to resolve non html whitespace as classname', () => {
+			const doc = getTestParser().parser.parseFromString(INPUT(), MIME_TYPE.XML_TEXT);
+			const body = doc.getElementsByTagName('body')[0];
+			const firstP = body.getElementsByTagName('p')[0];
+			expect(firstP).toBeDefined();
+
+			firstP.setAttribute('class', firstP.getAttribute('class') + ' ' + NON_HTML_WHITESPACE);
+
+			expect(body.getElementsByClassName(`quote ${NON_HTML_WHITESPACE}`)).toHaveLength(1);
+		});
+		test('should not allow regular expression in argument', () => {
+			const search = '(((a||||)+)+)+';
+			const matching = 'aaaaa';
+			expect(new RegExp(search).test(matching)).toBe(true);
+
+			const doc = getTestParser().parser.parseFromString(INPUT(search, matching, search), MIME_TYPE.XML_TEXT);
+			const body = doc.getElementsByTagName('body')[0];
+
+			expect(body.getElementsByClassName(search)).toHaveLength(2);
+		});
+		test('should return an empty collection when no class names or are passed', () => {
+			const doc = getTestParser().parser.parseFromString(INPUT(), MIME_TYPE.XML_TEXT);
+			const body = doc.getElementsByTagName('body')[0];
+
+			expect(body.getElementsByClassName('')).toHaveLength(0);
+		});
+		test('should return only children not the element itself', () => {
+			const doc = getTestParser().parser.parseFromString(INPUT(), MIME_TYPE.XML_TEXT);
+			const body = doc.getElementsByTagName('body')[0];
+			body.setAttribute('class', 'quote');
+
+			expect(body.getElementsByClassName('quote')).toHaveLength(4);
+		});
+		test('should return an empty collection when only spaces are passed', () => {
+			const doc = getTestParser().parser.parseFromString(
+				INPUT(' \f\n\r\t', ' \f\n\r\t', ' \f\n\r\t', ' \f\n\r\t'),
+				MIME_TYPE.XML_TEXT
+			);
+			const body = doc.getElementsByTagName('body')[0];
+
+			expect(body.getElementsByClassName(' \f\n\r\t')).toHaveLength(0);
+		});
+		test('should return only the case sensitive matching names', () => {
+			const MIXED_CASES = ['AAA', 'AAa', 'AaA', 'aAA'];
+			const doc = getTestParser().parser.parseFromString(INPUT(...MIXED_CASES), MIME_TYPE.XML_TEXT);
+
+			MIXED_CASES.forEach((className) => {
+				expect(doc.getElementsByClassName(className)).toHaveLength(1);
+			});
+		});
+	});
 	describe('setAttribute', () => {
 		test.each([null, NAMESPACE.HTML])('should set attribute as is in XML document with namespace %s', (ns) => {
 			const doc = new DOMImplementation().createDocument(ns, 'xml');
@@ -251,6 +245,11 @@ describe('Element', () => {
 			});
 			expect(doc.documentElement.hasAttribute(ATTR_MIXED_CASE)).toBe(true);
 			expect(doc.documentElement.hasAttribute(ATTR_LOWER_CASE)).toBe(false);
+
+			const attr = doc.documentElement.getAttributeNode(ATTR_MIXED_CASE);
+			doc.documentElement.setAttribute(ATTR_MIXED_CASE, VALUE + VALUE);
+			expect(doc.documentElement.getAttributeNode(ATTR_MIXED_CASE)).toBe(attr);
+			expect(doc.documentElement.getAttribute(ATTR_MIXED_CASE)).toBe(VALUE + VALUE);
 		});
 		test('should set attribute lower cased in HTML document', () => {
 			const doc = new DOMImplementation().createHTMLDocument();
@@ -270,6 +269,11 @@ describe('Element', () => {
 			expect(doc.documentElement.getAttribute(ATTR_MIXED_CASE)).toBe(doc.documentElement.getAttribute(ATTR_LOWER_CASE));
 			// since it's the same node it resolves to
 			expect(doc.documentElement.getAttributeNode(ATTR_MIXED_CASE)).toBe(doc.documentElement.getAttributeNode(ATTR_LOWER_CASE));
+
+			const attr = doc.documentElement.getAttributeNode(ATTR_MIXED_CASE);
+			doc.documentElement.setAttribute(ATTR_LOWER_CASE, VALUE + VALUE);
+			expect(doc.documentElement.getAttributeNode(ATTR_LOWER_CASE)).toBe(attr);
+			expect(doc.documentElement.getAttribute(ATTR_MIXED_CASE)).toBe(VALUE + VALUE);
 		});
 		test('should set attribute as is in HTML document with different namespace', () => {
 			const doc = new DOMImplementation().createHTMLDocument();
@@ -285,6 +289,123 @@ describe('Element', () => {
 			});
 			expect(nameSpacedElement.hasAttribute(ATTR_MIXED_CASE)).toBe(true);
 			expect(doc.documentElement.hasAttribute(ATTR_LOWER_CASE)).toBe(false);
+		});
+	});
+	describe('setAttributeNS', () => {
+		test('can properly set ns attribute', () => {
+			const root = new DOMParser().parseFromString(
+				"<xml xmlns:a='a' xmlns:b='b' xmlns='e'><child/></xml>",
+				MIME_TYPE.XML_TEXT
+			).documentElement;
+
+			const child = root.firstChild;
+			child.setAttributeNS('a', 'a:a', 'a:a');
+			child.setAttributeNS('b', 'b:b', 'b:b');
+			child.setAttributeNS('b', 'b:a', 'b:a');
+			const attrB = child.getAttributeNodeNS('b', 'b');
+			expect(attrB).not.toBeNull();
+			expect(child.getAttributeNS('b', 'b')).toBe('b:b');
+			expect(child.attributes.length).toBe(3);
+			child.setAttribute('a', 1);
+			child.setAttributeNS('b', 'b:b', 'b:b-updated');
+			expect(child.getAttributeNS('b', 'b')).toBe('b:b-updated');
+			expect(child.getAttributeNodeNS('b', 'b')).toBe(attrB);
+			expect(child.attributes.length).toBe(4);
+
+			const c = root.ownerDocument.createElement('c');
+			expect(() => {
+				c.setAttributeNodeNS(root.attributes.item(0));
+			}).toThrow(new DOMException(DOMException.INUSE_ATTRIBUTE_ERR));
+		});
+
+		test('can properly override attribute', () => {
+			const root = new DOMParser().parseFromString(
+				"<xml xmlns:a='a' xmlns:b='b' xmlns='e'><child/></xml>",
+				MIME_TYPE.XML_TEXT
+			).documentElement;
+			root.setAttributeNS('a', 'a:a', '1');
+			const attr = root.getAttributeNode('a:a');
+			expect(attr).not.toBeNull();
+			// getAttributeNS and getAttributeNodeNS expect the localName, not the qualified one!
+			expect(root.getAttributeNS('a', 'a')).toBe('1');
+			expect(root.getAttributeNodeNS('a', 'a')).toBe(attr);
+			root.setAttributeNS('a', 'a:a', '2');
+			expect(root.getAttributeNS('a', 'a')).toBe('2');
+			expect(root.getAttributeNodeNS('a', 'a')).toBe(attr);
+			expect(root.attributes.length).toBe(4);
+		});
+
+		test('properly supports attribute namespace', () => {
+			const root = new DOMParser().parseFromString(
+				"<xml xmlns:a='a' xmlns:b='b' a:b='e'></xml>",
+				MIME_TYPE.XML_TEXT
+			).documentElement;
+			expect(root.getAttributeNS('a', 'b')).toBe('e');
+		});
+		test('should throw InvalidCharacterError DOMException if qualifiedName does not match QName', () => {
+			const doc = new DOMImplementation().createDocument(null, 'doc');
+			expectDOMException(() => doc.documentElement.setAttributeNS(null, '123', ''), DOMExceptionName.InvalidCharacterError);
+		});
+		test('should throw NamespaceError DOMException if prefix is present but namespace is null', () => {
+			const doc = new DOMImplementation().createDocument(null, 'doc');
+			expectDOMException(
+				() => doc.documentElement.setAttributeNS(null, 'prefix:name', ''),
+				DOMExceptionName.NamespaceError,
+				'namespace is null'
+			);
+		});
+		test('should throw NamespaceError DOMException if prefix is "xml" but namespaceUri is not matching', () => {
+			const doc = new DOMImplementation().createDocument(null, 'doc');
+			expectDOMException(
+				() => doc.documentElement.setAttributeNS('unexpected', 'xml:name', ''),
+				DOMExceptionName.NamespaceError,
+				'namespace is not the XML namespace'
+			);
+		});
+		test('should throw NamespaceError DOMException if prefix is "xmlns" but namespaceUri is not matching', () => {
+			const doc = new DOMImplementation().createDocument(null, 'doc');
+			expectDOMException(
+				() => doc.documentElement.setAttributeNS('unexpected', 'xmlns:name', ''),
+				DOMExceptionName.NamespaceError,
+				'namespace is not the XMLNS namespace'
+			);
+		});
+		test('should throw NamespaceError DOMException if qualifiedName is "xmlns" but namespaceUri is not matching', () => {
+			const doc = new DOMImplementation().createDocument(null, 'doc');
+			expectDOMException(
+				() => doc.documentElement.setAttributeNS('unexpected', 'xmlns', ''),
+				DOMExceptionName.NamespaceError,
+				'namespace is not the XMLNS namespace'
+			);
+		});
+		test('should throw NamespaceError DOMException if it is the xmlns namespace but prefix is not xmlns', () => {
+			const doc = new DOMImplementation().createDocument(null, 'doc');
+			expectDOMException(
+				() => doc.documentElement.setAttributeNS(NAMESPACE.XMLNS, 'prefix:abc', ''),
+				DOMExceptionName.NamespaceError,
+				'namespace is the XMLNS namespace'
+			);
+		});
+		test('should throw NamespaceError DOMException if it is the xmlns namespace but qualifiedName is not xmlns', () => {
+			const doc = new DOMImplementation().createDocument(null, 'doc');
+			expectDOMException(
+				() => doc.documentElement.setAttributeNS(NAMESPACE.XMLNS, 'abc', ''),
+				DOMExceptionName.NamespaceError,
+				'namespace is the XMLNS namespace'
+			);
+		});
+	});
+	describe('hasAttributes', () => {
+		test('empty document', () => {
+			const doc = new DOMImplementation().createDocument(null, 'xml');
+			expect(doc.documentElement.hasAttributes()).toBe(false);
+		});
+		test('xml elements', () => {
+			const doc = new DOMParser().parseFromString('<test><a/><b a0="v0"><c a1="v1" a2="v2"/></b></test>', MIME_TYPE.XML_TEXT);
+			expect(doc.documentElement.hasAttributes()).toBe(false);
+			expect(doc.documentElement.childNodes[0].hasAttributes()).toBe(false);
+			expect(doc.documentElement.childNodes[1].hasAttributes()).toBe(true);
+			expect(doc.documentElement.childNodes[1].childNodes[0].hasAttributes()).toBe(true);
 		});
 	});
 });
